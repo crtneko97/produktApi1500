@@ -73,66 +73,7 @@ class ProductServiceTest {
 		
 
 	}
-	
-	//findAllCategories
-	
-	@Test
-	void findAllCategorys_thenReturnTrue() {
-		
-		//when
-		productRepository.findAllCategories();
-		
-		//then
-		verify(productRepository, times(1)).findAllCategories();
-		verifyNoMoreInteractions(productRepository);
-		
 
-		
-	}
-	
-	//findByCategory
-	@Test
-	
-	void findByCategory_test() {
-		
-		String category = "electronics";
-		Product product = new Product(
-				"Titel",
-				200.0,
-				category,
-				"desc",
-				"url");
-		
-		underTest.getProductsByCategory(category);
-		
-		verify(productRepository, times(1)).findByCategory(stringCaptor.capture());
-		
-		verifyNoMoreInteractions(productRepository);
-		assertEquals(category, stringCaptor.getValue());
-		
-	}
-	
-	//findByCategory
-	@Test
-	
-	void findByCategory_test2repo() {
-		
-		String category = "electronics";
-		Product product = new Product(
-				"Titel",
-				200.0,
-				category,
-				"desc",
-				"url");
-		
-		productRepository.findByCategory(category);
-		
-		verify(productRepository, times(1)).findByCategory(stringCaptor.capture());
-		
-		verifyNoMoreInteractions(productRepository);
-		assertEquals(category, stringCaptor.getValue());
-		
-	}
 	
 	
 	//can't find product by ID, return false.
@@ -157,28 +98,27 @@ class ProductServiceTest {
 	}
 	
 
+	//Se över denna
 	//Find product by ID.
 	@Test
 	void findproductBy_gettingTheID() {
-		
-		//given
-		Product product = new Product(
-				"Titel",
-				200.0,
-				"desc",
-				"category",
-				"url");
+
+		Integer id = 1;
+
+		Product product = new Product(id,"titel",100.00, "category", "desc", "bildurl");
 		
 		
-		given(productRepository.findById(product.getId())).willReturn(Optional.of(product));
+		given(productRepository.findById(id)).willReturn(Optional.of(product));
 		//when
-		underTest.getProductById(product.getId());
+		underTest.getProductById((id));
 		
 		//then
-		verify(productRepository, times(1)).findById(intCaptor.capture());
+		verify(productRepository, times(1)).findById(id);
 		verifyNoMoreInteractions(productRepository);
 		Assertions.assertTrue(productRepository.findById(product.getId()).isPresent());
 	}
+
+
 	
 	@Test
 	void deleteProductById_createProductThenDelete() {
@@ -238,6 +178,8 @@ class ProductServiceTest {
 		//Then
 		verify(productRepository).findAllCategories();
 	}
+
+
 	
 	// Test to find product by it's category
 	
@@ -245,14 +187,10 @@ class ProductServiceTest {
 	//SE ÖVER!!!!!
 	// givenGetAllProducts_thenExactlyOneInteractionWithRepository ändrade om
 	@Test
-	void givenGetProducts_thenExactlyOneInteractionWithRepo() {
-		//When
-		String electronics = "electronics";
-		List<Product> productsByCategory = underTest.getProductsByCategory(electronics);
-		//Then
-		verify(productRepository, times(1)).findByCategory(stringCaptor.capture());
-		Assertions.assertTrue(productsByCategory.isEmpty());
-		
+	void getProductsByCategory_andverify_FindByCategory() {
+		underTest.getProductsByCategory("electronic");
+		verify(productRepository,times(1)).findByCategory("electronic");
+		verifyNoMoreInteractions(productRepository);
 	}
 
 	
